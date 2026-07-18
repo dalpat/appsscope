@@ -1,6 +1,7 @@
 mod backends;
 mod images;
 mod runtime;
+mod screenshot;
 mod ui;
 
 use std::collections::HashSet;
@@ -110,7 +111,7 @@ enum Msg {
 
 #[relm4::component]
 impl SimpleComponent for Shell {
-    type Init = ();
+    type Init = screenshot::Job;
     type Input = Msg;
     type Output = ();
 
@@ -144,7 +145,12 @@ impl SimpleComponent for Shell {
                                 // the app title rather than beside the search
                                 // box — it is not a property of the search.
                                 pack_end = &gtk::MenuButton {
-                                    set_icon_name: "view-filter-symbolic",
+                                    // `view-filter-symbolic` and
+                                    // `funnel-symbolic` are both absent from
+                                    // Adwaita and rendered as a broken-image
+                                    // glyph; every icon name in this codebase
+                                    // is now checked against the theme.
+                                    set_icon_name: "selection-mode-symbolic",
                                     set_tooltip_text: Some("Filter by package format"),
                                     #[watch]
                                     set_css_classes: if model.format_filter.is_some() {
@@ -306,7 +312,7 @@ impl SimpleComponent for Shell {
     }
 
     fn init(
-        _init: Self::Init,
+        init: Self::Init,
         root: Self::Root,
         sender: ComponentSender<Self>,
     ) -> ComponentParts<Self> {
@@ -411,9 +417,21 @@ impl SimpleComponent for Shell {
 
         // Probing backends and indexing the catalog both touch disk, so
         // neither runs before the first frame.
-        runtime::spawn(startup(), move |(registry, catalog, count)| {
-            sender.input(Msg::Ready(Arc::new(registry), catalog, count));
+        runtime::spawn(startup(), {
+            let sender = sender.clone();
+            move |(registry, catalog, count)| {
+                sender.input(Msg::Ready(Arc::new(registry), catalog, count));
+            }
         });
+
+        if let Some(destination) = init.request().and_then(screenshot::Request::destination) {
+            // Driven through the sidebar rather than by setting state
+            // directly, so the selected row matches the visible page.
+            model.sidebar.emit(SidebarMsg::Select(destination));
+        }
+        if let Some(job) = init.into_request() {
+            screenshot::schedule(&root, job);
+        }
 
         ComponentParts { model, widgets }
     }
@@ -1229,6 +1247,14 @@ fn main() {
         )
         .init();
 
-    let app = RelmApp::new(APP_ID);
-    app.run::<Shell>(());
+    let job = screenshot::Job::from_env();
+
+    // A capture run must not hand off to an already-running instance, or it
+    // would photograph nothing and exit successfully.
+    let app = if job.is_some() {
+        RelmApp::new(&format!("{APP_ID}.Screenshot"))
+    } else {
+        RelmApp::new(APP_ID)
+    };
+    app.run::<Shell>(job);
 }

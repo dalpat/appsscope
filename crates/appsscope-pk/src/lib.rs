@@ -9,13 +9,14 @@
 //! deb and a Flatpak identically is hiding the most important difference
 //! between them.
 
+mod desktop;
 mod proxy;
 
 use std::collections::HashMap;
 
 use appsscope_core::{
-    App, AppRef, Backend, BackendId, Error, InstallPlan, InstalledApp, Phase, PlanItem, Progress,
-    Result, Sandbox,
+    App, AppRef, Backend, BackendId, Error, IconSource, InstallPlan, InstalledApp, Phase, PlanItem,
+    Progress, Result, Sandbox,
 };
 use async_trait::async_trait;
 use futures_core::stream::BoxStream;
@@ -205,6 +206,8 @@ impl Backend for PackageKitBackend {
         let rows = Self::query_installed(false).await?;
         Ok(rows.into_iter().filter_map(|row| to_installed(row, false)).collect())
     }
+
+
 
     async fn updates(&self) -> Result<Vec<InstalledApp>> {
         let rows = Self::query_installed(true).await?;
@@ -424,6 +427,16 @@ fn to_installed(row: PackageRow, has_update: bool) -> Option<InstalledApp> {
         return None;
     }
 
+    // PackageKit's APPLICATION filter lets daemons through on the apt backend,
+    // and gives neither a display name nor an icon. The desktop entry supplies
+    // all three: whether this is really an application, what to call it, and
+    // what to draw. A package with no visible desktop entry is dropped.
+    let applications = desktop::applications();
+    let entry = applications.get(name);
+    if entry.is_none() && !applications.is_empty() {
+        return None;
+    }
+
     // `data` is like `installed:ubuntu-resolute-main`; the part after the
     // colon is the origin worth showing.
     let origin = data.split_once(':').map(|(_, repo)| repo.to_owned());
@@ -438,13 +451,17 @@ fn to_installed(row: PackageRow, has_update: bool) -> Option<InstalledApp> {
 
     let app = App {
         app_ref,
-        name: name.to_owned(),
+        name: entry
+            .map(|entry| entry.name.clone())
+            .unwrap_or_else(|| name.to_owned()),
         summary: (!row.summary.is_empty()).then(|| row.summary.clone()),
         description: None,
         developer: None,
         license: None,
         categories: Vec::new(),
-        icon: None,
+        icon: entry
+            .and_then(|entry| entry.icon.clone())
+            .map(IconSource::Themed),
         screenshots: Vec::new(),
         releases: Vec::new(),
         version: (!version.is_empty()).then(|| version.to_owned()),

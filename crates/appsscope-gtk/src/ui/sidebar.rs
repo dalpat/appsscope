@@ -71,6 +71,8 @@ pub struct Sidebar {
 #[derive(Debug)]
 pub enum SidebarMsg {
     Selected(Destination),
+    /// Move the selection programmatically, as a click would.
+    Select(Destination),
     /// Number of pending updates, for the badge.
     SetUpdateCount(usize),
 }
@@ -162,6 +164,23 @@ impl SimpleComponent for Sidebar {
             SidebarMsg::Selected(destination) => {
                 let _ = sender.output(SidebarOutput::Navigate(destination));
             }
+            SidebarMsg::Select(destination) => {
+                // Selecting the row emits `Selected` through the normal
+                // handler, so the highlight and the content cannot disagree.
+                let primary = primary();
+                if let Some(index) = primary.iter().position(|(_, _, d)| *d == destination) {
+                    if let Some(row) = self.primary_list.row_at_index(index as i32) {
+                        self.primary_list.select_row(Some(&row));
+                    }
+                } else if let Some(index) =
+                    categories().iter().position(|(_, _, d)| *d == destination)
+                {
+                    if let Some(row) = self.category_list.row_at_index(index as i32) {
+                        self.category_list.select_row(Some(&row));
+                    }
+                }
+            }
+
             SidebarMsg::SetUpdateCount(count) => {
                 self.update_badge.set_visible(count > 0);
                 self.update_badge.set_label(&count.to_string());

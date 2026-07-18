@@ -46,6 +46,13 @@
   <content_rating type="oars-1.1"/>
 
   <releases>
+    <release version="0.1.1" date="2026-07-19">
+      <description>
+        <p>Installed system packages are now filtered to real applications
+        using their desktop entries, with proper names and icons. Fixes a
+        missing icon in the sidebar.</p>
+      </description>
+    </release>
     <release version="0.1.0" date="2026-07-18">
       <description>
         <p>First release: Flatpak and distro package management, permission

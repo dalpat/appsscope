@@ -28,7 +28,7 @@ dependencies = [
 
 [[package]]
 name = "appsscope-catalog"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "appsscope-core",
  "appstream",
@@ -39,7 +39,7 @@ dependencies = [
 
 [[package]]
 name = "appsscope-core"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "async-trait",
  "futures-core",
@@ -49,7 +49,7 @@ dependencies = [
 
 [[package]]
 name = "appsscope-flatpak"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "appsscope-core",
  "async-trait",
@@ -64,7 +64,7 @@ dependencies = [
 
 [[package]]
 name = "appsscope-gtk"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "appsscope-catalog",
  "appsscope-core",
@@ -84,7 +84,7 @@ dependencies = [
 
 [[package]]
 name = "appsscope-pk"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "appsscope-core",
  "async-trait",
