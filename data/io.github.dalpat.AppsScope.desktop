@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=AppsScope
+GenericName=Software Centre
+Comment=Install apps and see exactly what they can access
+Exec=appsscope
+Icon=io.github.dalpat.AppsScope
+Terminal=false
+Categories=GTK;GNOME;System;PackageManager;
+Keywords=app;store;software;install;package;flatpak;deb;update;permissions;sandbox;
+StartupNotify=true
+StartupWMClass=appsscope

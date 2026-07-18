@@ -1,0 +1,17 @@
+[package]
+name = "appsscope-pk"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+appsscope-core.workspace = true
+async-trait.workspace = true
+futures-core.workspace = true
+futures-util.workspace = true
+tokio.workspace = true
+tokio-stream.workspace = true
+tokio-util.workspace = true
+tracing.workspace = true
+zbus = { version = "5", default-features = false, features = ["tokio"] }

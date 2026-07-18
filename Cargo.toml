@@ -1,0 +1,53 @@
+[workspace]
+resolver = "3"
+members = ["crates/*"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.85"
+license = "GPL-3.0-or-later"
+repository = "https://github.com/dalpat/appsscope"
+
+[workspace.dependencies]
+appsscope-core = { path = "crates/appsscope-core" }
+appsscope-catalog = { path = "crates/appsscope-catalog" }
+appsscope-flatpak = { path = "crates/appsscope-flatpak" }
+appsscope-pk = { path = "crates/appsscope-pk" }
+
+anyhow = "1"
+async-trait = "0.1"
+futures-core = "0.3"
+futures-util = "0.3"
+thiserror = "2"
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "sync", "time", "fs"] }
+tokio-stream = "0.1"
+tokio-util = "0.7"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# `libadwaita` gates relm4's adw re-export and makes RelmApp init Adwaita.
+relm4 = { version = "0.11", features = ["libadwaita"] }
+
+# Both declared directly only to turn on their version features — cargo
+# unifies each with the copy relm4 pulls in, so there is still one gtk4 and
+# one libadwaita in the build.
+#
+# `v4_12` buys `CssProvider::load_from_string` and `Picture::set_content_fit`.
+# libadwaita 1.7 already requires a newer GTK than this, so it costs nothing.
+gtk = { package = "gtk4", version = "0.11", features = ["v4_12"] }
+#
+# The minimum runtime we bind against, and a real portability floor: the
+# binary needs at least this libadwaita version to start.
+#
+# `dpkg-shlibdeps` on the release binary reports the symbols actually
+# referenced only require 1.6, so this is set to match rather than to the
+# newest available — every version above the true floor is a distro
+# needlessly excluded. `AdwSpinner` (1.6) is what sets it; Ubuntu 24.04 LTS
+# ships 1.5 and so remains out of reach.
+adw = { package = "libadwaita", version = "0.9", features = ["v1_6"] }
+
+[profile.release]
+lto = "thin"
+codegen-units = 1
+strip = "debuginfo"

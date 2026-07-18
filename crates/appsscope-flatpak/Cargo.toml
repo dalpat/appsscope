@@ -1,0 +1,17 @@
+[package]
+name = "appsscope-flatpak"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+appsscope-core.workspace = true
+async-trait.workspace = true
+futures-core.workspace = true
+futures-util.workspace = true
+libflatpak = "0.7"
+tokio.workspace = true
+tokio-stream.workspace = true
+tokio-util.workspace = true
+tracing.workspace = true

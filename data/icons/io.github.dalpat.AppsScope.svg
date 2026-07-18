@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  AppsScope application icon.
+
+  A grid of app tiles with a lens over it: the store, and the act of looking
+  closely at what is in it. Drawn flat with a single accent so it reads at
+  32px in a dock as well as at 128px in a grid.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="plate" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3584e4"/>
+      <stop offset="100%" stop-color="#1c71d8"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.98"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.82"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Rounded plate, matching the icon shape used throughout the app. -->
+  <rect x="8" y="8" width="112" height="112" rx="26" fill="url(#plate)"/>
+
+  <!-- App tiles. The fourth is deliberately absent: the lens sits there. -->
+  <g fill="#ffffff" opacity="0.92">
+    <rect x="30" y="30" width="26" height="26" rx="8"/>
+    <rect x="66" y="30" width="26" height="26" rx="8"/>
+    <rect x="30" y="66" width="26" height="26" rx="8"/>
+  </g>
+
+  <!-- Lens over the missing tile, inspecting it. -->
+  <g transform="translate(2 2)">
+    <circle cx="77" cy="77" r="21" fill="url(#glass)"/>
+    <circle cx="77" cy="77" r="21" fill="none" stroke="#1a5fb4" stroke-width="5"/>
+    <path d="M92 92 L106 106" stroke="#1a5fb4" stroke-width="9" stroke-linecap="round"/>
+    <!-- A tick inside the lens: the verdict, not just the inspection. -->
+    <path d="M68 77 L75 84 L88 70" fill="none" stroke="#1a5fb4" stroke-width="6"
+          stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

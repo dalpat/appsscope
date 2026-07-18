@@ -1,0 +1,16 @@
+[package]
+name = "appsscope-catalog"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+appsscope-core.workspace = true
+# `gzip` is not a default feature, and every catalog we read is gzipped.
+appstream = { version = "0.2", features = ["gzip"] }
+# `bundled` compiles SQLite in — FTS5 is not guaranteed present in the system
+# libsqlite3, and the whole search design depends on it.
+rusqlite = { version = "0.40", features = ["bundled"] }
+thiserror.workspace = true
+tracing.workspace = true

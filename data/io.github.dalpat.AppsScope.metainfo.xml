@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.dalpat.AppsScope</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+
+  <name>AppsScope</name>
+  <summary>Install apps and see exactly what they can access</summary>
+
+  <description>
+    <p>
+      AppsScope is an app store for Linux that tells you what an app can
+      actually do to your computer before you install it.
+    </p>
+    <p>
+      Many Flatpak apps ship with unrestricted access to every file you own.
+      Existing software centres reduce this to a vague warning, if they mention
+      it at all. AppsScope grades every app in plain language, shows what an
+      install will really download, and lets you revoke permissions without
+      leaving the store.
+    </p>
+    <ul>
+      <li>Every app graded: sandboxed, limited access, or full access</li>
+      <li>A consent dialog before installing, listing what you are granting</li>
+      <li>Real download sizes, including runtimes you do not have yet</li>
+      <li>Revoke permissions in place, shared with Flatseal and the CLI</li>
+      <li>Flatpak and distro packages side by side, clearly labelled</li>
+    </ul>
+  </description>
+
+  <developer id="io.github.dalpat">
+    <name>AppsScope</name>
+  </developer>
+
+  <url type="homepage">https://github.com/dalpat/appsscope</url>
+  <url type="bugtracker">https://github.com/dalpat/appsscope/issues</url>
+
+  <launchable type="desktop-id">io.github.dalpat.AppsScope.desktop</launchable>
+  <provides><binary>appsscope</binary></provides>
+
+  <categories>
+    <category>System</category>
+    <category>PackageManager</category>
+  </categories>
+
+  <content_rating type="oars-1.1"/>
+
+  <releases>
+    <release version="0.1.0" date="2026-07-18">
+      <description>
+        <p>First release: Flatpak and distro package management, permission
+        grading, and install-time disclosure.</p>
+      </description>
+    </release>
+  </releases>
+</component>

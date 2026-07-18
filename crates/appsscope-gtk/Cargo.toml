@@ -1,0 +1,26 @@
+[package]
+name = "appsscope-gtk"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "appsscope"
+path = "src/main.rs"
+
+[dependencies]
+appsscope-core.workspace = true
+appsscope-catalog.workspace = true
+appsscope-flatpak.workspace = true
+appsscope-pk.workspace = true
+relm4.workspace = true
+adw.workspace = true
+gtk.workspace = true
+futures-core.workspace = true
+futures-util.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+reqwest = { version = "0.12", default-features = false, features = ["rustls-tls", "http2"] }
+image = { version = "0.25", default-features = false, features = ["png", "jpeg", "webp"] }
